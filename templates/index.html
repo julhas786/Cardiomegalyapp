@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chest X-ray Cardiology Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background: #007bff;
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        .custom-file-label::after {
+            content: "Browse";
+        }
+/* adding positioning of output grad cams       */
+        /*.container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }*/
+        .column {
+            position: relative;
+            width: 75%;
+        }
+        .shift-right {
+            margin-left: 60px;
+        }
+        .title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h1>Chest X-ray Cardiology Prediction</h1>
+                    </div>
+                    <div class="card-body">
+                        <form action="/predict" method="post" enctype="multipart/form-data" class="form-group">
+                            <div class="custom-file mb-3">
+                                <input type="file" name="file" accept="image/*" class="custom-file-input"
+                                    id="customFile" required>
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Predict</button>
+                        </form>
+                        <div>
+                            {% if prediction %}
+                            <h2 class="mt-3">Prediction: {{ prediction }}</h2>
+                            {% endif %}
+                        </div>
+                        <!-- adding grad cam outputs -->
+                        <h2>Grad CAM X-Ray Images Side by Side</h2>
+                        <div>
+                            {% if show %}
+
+                          <!-- <div class="row">
+                            <div class="column">
+                              <img src="{{url_for('static', filename='original.png')}}" alt="original final" style="width:200%">
+                            </div>
+                            <div class="column">
+                              <img src="{{url_for('static', filename='gradcamsuperimposed.png')}}" alt="Resul final" style="width:200%">
+                            </div>
+                          </div> -->
+                          <div class="container">
+                            <div class="column shift-right">
+                                <div class="title">Original Input</div>
+                                <img src="{{ url_for('static', filename='original.png') }}" alt="Original final" style="width:75%;">
+                            </div>
+                            <div class="column shift-right">
+                                <div class="title">Predicted GradCAM Overlay</div>
+                                <img src="{{ url_for('static', filename='gradcamsuperimposed.png') }}" alt="Result final" style="width:75%;">
+                            </div>
+                        </div>
+                        {% endif %}
+                        <!--  -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Script to show the name of the file selected
+        $('.custom-file-input').on('change', function (event) {
+            var inputFile = event.currentTarget;
+            $(inputFile).parent().find('.custom-file-label').html(inputFile.files[0].name);
+        });
+    </script>
+</body>
+
+</html>
